@@ -1,3 +1,11 @@
+# Epics bin
+/bin
+*.swp
+O.linux-x86_64
+O.Common
+/iocBoot/iocscu800/envPaths
+/db
+/dbd
 # Prerequisites
 *.d
 
