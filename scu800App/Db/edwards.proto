@@ -19,4 +19,19 @@ rConv {
   out ${1} 0;
   in  "%02r";
 }
-
+# e.g SetSpeedSetPointM("01") {
+SetSpeedSetPointM {
+    out "@\$1",STX,"001 h%04X",ETX,"%<xor8ff>"
+    in ACK,$1,STX,"001#",ETX,"%<xor8ff>"
+    out ACK,$1;
+}
+SetSpeedSetPoint {
+    out STX,"001 h%04X",ETX,"%<xor8ff>"
+    in ACK,STX,"001#",ETX,"%<xor8ff>"
+    out ACK;
+}
+ReadSpeedSetPoint{
+    out STX,"001?h",ETX,"%<xor8ff>"
+    in ACK,STX,"001#%!4X",ETX,"%<xor8ff>"
+    out ACK;
+}
