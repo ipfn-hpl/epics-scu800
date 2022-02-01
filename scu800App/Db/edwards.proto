@@ -1,13 +1,13 @@
 Terminator   = "";
-LockTimeout  = 500;
-ReplyTimeout = 100;
-ReadTimeout  = 100;
+#LockTimeout  = 500;
+ReplyTimeout = 500;
+ReadTimeout  = 500;
 WriteTimeout = 100;
-MaxInput     = 2;
+MaxInput     = 60;
 ExtraInput   = Error;
 
 wCtrl {
-  out ${1} 2 "%.2r"; 
+  out ${1} 2 "%.2r";
 }
 
 rCtrl {
@@ -21,38 +21,46 @@ rConv {
 }
 # e.g Command("01") {
 Command {
-    out "@\$1",STX,"001 E%02X",ETX,"%<xor8ff>"
-    in ACK,$1,STX,"001#",ETX,"%<xor8ff>"
+    out "@\$1",STX,"001 E%02X",ETX,"%<xor8ff>";
+    in ACK,$1,STX,"001#",ETX,"%<xor8ff>";
     out ACK,$1;
 }
 # e.g SetSpeedSetPointM("01") {
 SetSpeedSetPointM {
-    out "@\$1",STX,"001 h%04X",ETX,"%<xor8ff>"
-    in ACK,$1,STX,"001#",ETX,"%<xor8ff>"
+    out "@\$1",STX,"001 h%04X",ETX,"%<xor8ff>";
+    in ACK,$1,STX,"001#",ETX,"%<xor8ff>";
     out ACK,$1;
 }
 SetSpeedSetPoint {
-    out STX,"001 h%04X",ETX,"%<xor8ff>"
-    in ACK,STX,"001#",ETX,"%<xor8ff>"
+    out STX,"001 h%04X",ETX,"%<xor8ff>";
+    in ACK,STX,"001#",ETX,"%<xor8ff>";
     out ACK;
 }
 ReadSpeedSetPoint{
-    out STX,"001?h",ETX,"%<xor8ff>"
-    in ACK,STX,"001 h%!4X",ETX,"%<xor8ff>"
+    out STX,"001?h",ETX,"%<xor8ff>";
+    in ACK,STX,"001 h%!4X",ETX,"%<xor8ff>";
     out ACK;
 }
 ReadMotorTemp{
-    out STX,"001?e",ETX,"%<xor8ff>"
-    in ACK,STX,"001 e%!4X",ETX,"%<xor8ff>"
+    out STX,"001?e",ETX,"%<xor8ff>";
+    in ACK,STX,"001 e%!4X",ETX,"%<xor8ff>";
     out ACK;
 }
+
+#readmeas{
+#    out STX,'001?D',ETX,"%<xor8ff>";
+#    in ACK,STX,"001 D%*15s%4X",ETX,"%1<xor8ff>";
+#    out "\x06";
+#}
+
+#    in ACK,STX,"001 D%!4X",ETX,"%<xor8ff>"
 ReadMeas{
-    out STX,"001?D",ETX,"%<xor8ff>"
-    in ACK,STX,"001 D%!4X",ETX,"%<xor8ff>"
+    out STX,"001?D",ETX,"%<xor8ff>";
+    in ACK,STX,"001 D%*15X%4X",ETX,"%1<xor8ff>";
     out ACK;
 }
 ReadModFonct{
-    out STX,"001?M",ETX,"%<xor8ff>"
-    in ACK,STX,"001 D%!4X",ETX,"%<xor8ff>"
+    out STX,"001?M",ETX,"%<xor8ff>";
+    in ACK,STX,"001 D%!4X",ETX,"%<xor8ff>";
     out ACK;
 }

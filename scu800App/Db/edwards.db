@@ -24,18 +24,21 @@
 #######################################
 # ### Read/Write control register ### #
 #######################################
-#record( mbboDirect, "AD7998:$(ID):CTRLREGISTER" ) {
-record( longout, "AD7998:$(ID):CTRLREGISTER" ) {
-  field( DTYP, "stream" )
-  field( OUT,  "@edwards.proto wCtrl($(ID)) $(BUS)" )
-  field( DRVH, "4095" )
-  field( DRVL, "0" )
-#field( NOBT, "12" )
-#field( SHFT, "0" )
+
+################################################
+# ### Reads the measured rotational speed  ### #
+################################################
+record(longin, $(P)$(R)$(A):ReadMeas){
+    field(DESC, "Reads the measured rotational speed")
+    field(DTYP, "stream")
+    field(INP, "@edwards.proto ReadMeas($(A)) RS485")
+    #field(PINI, "YES")
+    field(VAL, "22")
+    field(SCAN, "2 second")
 }
-record(longout, $(P)$(A)SetSpeedSetpoint){
+record(longout, $(P)$(R)$(A):SetSpeedSetpoint){
   field( DTYP, "stream" )
-  field( OUT,  "@edwards.proto SetSpeedSetpoint($(A)) $(BUS)" )
+  field( OUT,  "@edwards.proto SetSpeedSetpoint($(A)) $(BUS)")
   # Check Pump rpm rates
   field( DRVH, "500" )
   # half of rated spped
@@ -44,7 +47,7 @@ record(longout, $(P)$(A)SetSpeedSetpoint){
   field(EGU "Hz")
 
 }
-record(longin, $(P)$(A)ReadSetpoint){
+record(longin, $(P)$(R)$(A):ReadSetpoint){
   field( DTYP, "stream" )
   field( IN,  "@edwards.proto ReadSetpoint($(A)) $(BUS)" )
   # Check Pump rpm rates
@@ -55,9 +58,9 @@ record(longin, $(P)$(A)ReadSetpoint){
   field(EGU "Hz")
 
 }
-record(longout, $(P)$(R)SetSpeedSetpoint){
+record(longout, $(P)$(R)$(A):SetSpeedSetpoint){
   field( DTYP, "stream" )
-  field( OUT,  "@edwards.proto SetSpeedSetpoint($(R)) $(BUS)" )
+  field( OUT,  "@edwards.proto SetSpeedSetpoint($(R)) $(BUS)")
   # Check Pump rpm rates
   field( DRVH, "500" )
   # half of rated spped
@@ -66,7 +69,7 @@ record(longout, $(P)$(R)SetSpeedSetpoint){
   field(EGU "Hz")
 
 }
-record(mbbo, $(P)$(A)Command){
+record(mbbo, $(P)$(R)$(A):Command){
   field( DTYP, "stream" )
   field( OUT,  "@edwards.proto Command($(A)) $(BUS)" )
   # Check Pump rpm rates
@@ -78,18 +81,22 @@ record(mbbo, $(P)$(A)Command){
   field( TWST, "STOP" )
   field( FRST, "RESET" )
   # half of rated spped
-
-
 }
 #######################################
 # ### Read/Write control register ### #
 #######################################
 #record( mbboDirect, "AD7998:$(ID):CTRLREGISTER" ) {
-record( longout, "AD7998:$(ID):CTRLREGISTER" ) {
-  field( DTYP, "stream" )
-  field( OUT,  "@edwards.proto wCtrl($(ID)) $(BUS)" )
-  field( DRVH, "4095" )
-  field( DRVL, "0" )
+#record( longout, "AD7998:$(ID):CTRLREGISTER" ) {
+#  field( DTYP, "stream" )
+#  field( OUT,  "@edwards.proto wCtrl($(ID)) $(BUS)" )
+#  field( DRVH, "4095" )
+#  field( DRVL, "0" )
 #field( NOBT, "12" )
 #field( SHFT, "0" )
+}
+record(stringout, $(P)$(A):generic){
+    field(DESC, "Generic")
+    field(DTYP, "stream")
+    field(OUT, "@edwards.proto debug($(A)) RS485")
+#    field(PINI, "YES")
 }

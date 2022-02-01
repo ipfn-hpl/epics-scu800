@@ -14,12 +14,17 @@ DBD += scu800.dbd
 
 # scu800.dbd will be made up from these files:
 scu800_DBD += base.dbd
+scu800_DBD += asyn.dbd
+scu800_DBD += drvAsynSerialPort.dbd
+scu800_DBD += stream.dbd
 
 # Include dbd files from all support applications:
 #scu800_DBD += xxx.dbd
 
 # Add all the support libraries needed by this IOC
 #scu800_LIBS += xxx
+scu800_LIBS += asyn
+scu800_LIBS += stream
 
 # scu800_registerRecordDeviceDriver.cpp derives from scu800.dbd
 scu800_SRCS += scu800_registerRecordDeviceDriver.cpp
