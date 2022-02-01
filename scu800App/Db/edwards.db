@@ -1,4 +1,5 @@
 #######################################################
+## vim: sta:et:sw=4:ts=4:sts=4
 # ###                                             ### #
 # ### EPICS Database for                          ### #
 # ### SCU-800 Vacuum Contrller                    ### #
@@ -34,40 +35,87 @@ record(longin, $(P)$(R)$(A):ReadMeas){
     field(INP, "@edwards.proto ReadMeas($(A)) RS485")
     #field(PINI, "YES")
     field(VAL, "22")
+#    field(SCAN, "2 second")
+}
+record(longout, $(P)$(R)$(A):SetSpeedSetpoint){
+    field(DESC, "Reads the measured rotational speed")
+    field( DTYP, "stream" )
+    field( OUT,  "@edwards.proto SetSpeedSetpoint($(A)) $(BUS)")
+    # Check Pump rpm rates. rated 35000 ~ 584 Hz
+    field( DRVH, "584" )
+    # half of rated spped
+    field( DRVL, "292" )
+    field(EGU, "Hz")
+}
+record(longin, $(P)$(R)$(A):ReadSpeedSetpointSingle){
+    field(DESC, "Reads the the Speed Set Point value")
+    field( DTYP, "stream" )
+  field( INP,  "@edwards.proto ReadSpeedSetpointSingle() $(BUS)" )
+  # Check Pump rpm rates
+  # half of rated spped
+  field(HIGH, "36000")
+  field(HIHI, "40000")
+  field(VAL, "66")
+  field(EGU, "Hz")
+#  field(SCAN, "2 second")
+}
+record(longin, $(P)$(R)$(A):ReadSpeedSetpoint){
+    field(DESC, "Reads the the Speed Set Point value")
+    field( DTYP, "stream" )
+    field( INP,  "@edwards.proto ReadSpeedSetpoint('01') $(BUS)")
+  # Check Pump rpm rates
+  # half of rated spped
+    field(HIGH, "36000")
+    field(HIHI, "40000")
+    field(VAL, "666")
+    field(EGU, "Hz")
     field(SCAN, "2 second")
 }
-record(longout, $(P)$(R)$(A):SetSpeedSetpoint){
+record(longin, $(P)$(R)$(A):ReadSetpointM){
+  field(DESC, "Reads Speed SP & TMS temperature")
   field( DTYP, "stream" )
-  field( OUT,  "@edwards.proto SetSpeedSetpoint($(A)) $(BUS)")
+  field( INP,  "@edwards.proto ReadSetpointM('01') $(BUS)" )
   # Check Pump rpm rates
-  field( DRVH, "500" )
   # half of rated spped
-
-  field( DRVL, "250" )
-  field(EGU "Hz")
-
+  field(HIGH, "36000")
+  field(HIHI, "40001")
+  field(VAL, "666")
+  field(EGU, "Hz")
+#  field(SCAN, "2 second")
 }
 record(longin, $(P)$(R)$(A):ReadSetpoint){
+  field(DESC, "Reads Speed SP & TMS temperature")
   field( DTYP, "stream" )
-  field( IN,  "@edwards.proto ReadSetpoint($(A)) $(BUS)" )
+  field( INP,  "@edwards.proto ReadSetpoint($(A)) $(BUS)" )
   # Check Pump rpm rates
   # half of rated spped
-  field(HIGH, "500")
-  field(HIHI, "600")
-
-  field(EGU "Hz")
-
+  field(HIGH, "36000")
+  field(HIHI, "40000")
+  field(VAL, "666")
+  field(EGU, "Hz")
+#  field(SCAN, "2 second")
 }
-record(longout, $(P)$(R)$(A):SetSpeedSetpoint){
-  field( DTYP, "stream" )
-  field( OUT,  "@edwards.proto SetSpeedSetpoint($(R)) $(BUS)")
+record(longin, $(P)$(R)$(A):ReadStatus){
+  field(DESC, "Reads various setting")
+  field(DTYP, "stream" )
+  field(INP,  "@edwards.proto ReadStatus('01') $(BUS)" )
   # Check Pump rpm rates
-  field( DRVH, "500" )
   # half of rated spped
-
-  field( DRVL, "250" )
-  field(EGU "Hz")
-
+  #field(HIGH, "100")
+  #field(HIHI, "110")
+  #field(VAL, "1")
+  #field(EGU, "C")
+  field(SCAN, "2 second")
+}
+record(longin, $(P)$(R)$(A):ReadMotorTemp){
+  field(DESC, "Reads the measured motor temperature")
+  field(DTYP, "stream" )
+  field(INP,  "@edwards.proto ReadMotorTemp('01') $(BUS)" )
+  field(HIGH, "100")
+  field(HIHI, "110")
+  field(VAL, "1")
+  field(EGU, "C")
+  field(SCAN, "10 second")
 }
 record(mbbo, $(P)$(R)$(A):Command){
   field( DTYP, "stream" )
@@ -80,23 +128,24 @@ record(mbbo, $(P)$(R)$(A):Command){
   field( ONST, "START" )
   field( TWST, "STOP" )
   field( FRST, "RESET" )
+  field(VAL, "0")
   # half of rated spped
 }
 #######################################
 # ### Read/Write control register ### #
 #######################################
-#record( mbboDirect, "AD7998:$(ID):CTRLREGISTER" ) {
-#record( longout, "AD7998:$(ID):CTRLREGISTER" ) {
+#record( mbboDirect, "AD7998:$(A):CTRLREGISTER" ) {
+#record( longout, "AD7998:$(A):CTRLREGISTER" ) {
 #  field( DTYP, "stream" )
-#  field( OUT,  "@edwards.proto wCtrl($(ID)) $(BUS)" )
+#  field( OUT,  "@edwards.proto wCtrl($(A)) $(BUS)" )
 #  field( DRVH, "4095" )
 #  field( DRVL, "0" )
 #field( NOBT, "12" )
 #field( SHFT, "0" )
-}
+#}
 record(stringout, $(P)$(A):generic){
     field(DESC, "Generic")
     field(DTYP, "stream")
-    field(OUT, "@edwards.proto debug($(A)) RS485")
+    field(OUT, "@edwards.proto debug('01') RS485")
 #    field(PINI, "YES")
 }

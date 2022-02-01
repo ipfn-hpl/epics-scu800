@@ -1,17 +1,18 @@
 Terminator   = "";
 #LockTimeout  = 500;
-ReplyTimeout = 500;
-ReadTimeout  = 500;
+ReplyTimeout = 200;
+ReadTimeout  = 100;
 WriteTimeout = 100;
-MaxInput     = 60;
+MaxInput     = 80;
 ExtraInput   = Error;
+#ExtraInput   = Ignore;
 
 wCtrl {
   out ${1} 2 "%.2r";
 }
 
 rCtrl {
-  out ${1} 2; 
+  out ${1} 2;
   in  "%02r";
 }
 
@@ -25,26 +26,55 @@ Command {
     in ACK,$1,STX,"001#",ETX,"%<xor8ff>";
     out ACK,$1;
 }
-# e.g SetSpeedSetPointM("01") {
-SetSpeedSetPointM {
-    out "@\$1",STX,"001 h%04X",ETX,"%<xor8ff>";
-    in ACK,$1,STX,"001#",ETX,"%<xor8ff>";
+#out "@",$1,STX,"001?h",ETX,"%3<xor8ff>";
+ReadSpeedSetPoint{
+    out "@",$1,STX,"001?h",ETX,"%3<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 h%!4X",ETX,"%6<xor8ff>";
     out ACK,$1;
 }
+# e.g SetSpeedSetPoint("01") {
+#NOK    @init {ReadSpeedSetPoint($1); }
 SetSpeedSetPoint {
-    out STX,"001 h%04X",ETX,"%<xor8ff>";
-    in ACK,STX,"001#",ETX,"%<xor8ff>";
-    out ACK;
+    out "@",$1,STX,"001 h%04X",ETX,"%3<xor8ff>";
+    in ACK,$1,"@",$1,STX,"001#",ETX,"%6<xor8ff>";
+    out ACK,$1;
 }
-ReadSpeedSetPoint{
+SetSpeedSetPointSingle {
+    out "@\$1",STX,"001 h%04X",ETX,"%<xor8ff>";
+    in ACK,$1,STX,"001#",ETX,"%3<xor8ff>";
+    out ACK,$1;
+}
+ReadSpeedSetPointSingle{
     out STX,"001?h",ETX,"%<xor8ff>";
-    in ACK,STX,"001 h%!4X",ETX,"%<xor8ff>";
+    in ACK,STX,"001 h%!4X",ETX,"%1<xor8ff>";
     out ACK;
 }
-ReadMotorTemp{
-    out STX,"001?e",ETX,"%<xor8ff>";
-    in ACK,STX,"001 e%!4X",ETX,"%<xor8ff>";
+#    out STX,"001 h%04X",ETX,"%<xor8ff>";
+ReadSetPointM{
+    out STX,"001?d",ETX,"%<xor8ff>";
+    in ACK,STX,"001 d%4X%*4X",ETX,"%1<xor8ff>";
     out ACK;
+}
+ReadSetPoint{
+    out STX,"001?d",ETX,"%<xor8ff>";
+    in ACK,STX,"001 d%4X%*4X",ETX,"%1<xor8ff>";
+    out ACK;
+}
+ReadMotorTempSingle{
+    out STX,"001?e",ETX,"%<xor8ff>";
+    in ACK,STX,"001 e%!4X",ETX,"%1<xor8ff>";
+    out ACK;
+}
+#    out "@","01",STX,"001?e",ETX,"%<xor8ff>";
+ReadMotorTemp{
+    out        "@",$1,STX,"001?e",ETX,"%3<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 e%!4X",ETX,"%6<xor8ff>";
+    out ACK,$1;
+}
+ReadStatus{
+    out        "@",$1,STX,"001?f",ETX,"%3<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 f%!8X",ETX,"%6<xor8ff>";
+    out ACK,$1;
 }
 
 #readmeas{
@@ -54,9 +84,12 @@ ReadMotorTemp{
 #}
 
 #    in ACK,STX,"001 D%!4X",ETX,"%<xor8ff>"
+#    in ACK,STX,"001 D%*14X%4X",ETX,"%1<xor8ff>";
+# OK:
+# in ACK,STX,"001 D%*15s%4X",ETX,"%1<xor8ff>";
 ReadMeas{
     out STX,"001?D",ETX,"%<xor8ff>";
-    in ACK,STX,"001 D%*15X%4X",ETX,"%1<xor8ff>";
+    in ACK,STX,"001 D%*14X%4X",ETX,"%1<xor8ff>";
     out ACK;
 }
 ReadModFonct{
@@ -64,3 +97,13 @@ ReadModFonct{
     in ACK,STX,"001 D%!4X",ETX,"%<xor8ff>";
     out ACK;
 }
+# Connect a stringout record to this to get
+# a generic command interface.
+# After processing finishes, the record contains the reply.
+
+debug {
+    ExtraInput = Ignore;
+    out "%s"; in "%60c"
+}
+
+
