@@ -3,7 +3,7 @@ Terminator   = "";
 ReplyTimeout = 200;
 ReadTimeout  = 100;
 WriteTimeout = 100;
-MaxInput     = 80;
+MaxInput     = 170;
 ExtraInput   = Error;
 #ExtraInput   = Ignore;
 
@@ -55,23 +55,28 @@ ReadSetPointM{
     in ACK,STX,"001 d%4X%*4X",ETX,"%1<xor8ff>";
     out ACK;
 }
-ReadSetPoint{
+ReadSetPoint {
     out STX,"001?d",ETX,"%<xor8ff>";
     in ACK,STX,"001 d%4X%*4X",ETX,"%1<xor8ff>";
     out ACK;
 }
-ReadMotorTempSingle{
+ReadMotorTempSingle {
     out STX,"001?e",ETX,"%<xor8ff>";
     in ACK,STX,"001 e%!4X",ETX,"%1<xor8ff>";
     out ACK;
 }
 #    out "@","01",STX,"001?e",ETX,"%<xor8ff>";
-ReadMotorTemp{
+ReadMotorTemp {
     out        "@",$1,STX,"001?e",ETX,"%3<xor8ff>";
     in  ACK,$1,"@",$1,STX,"001 e%!4X",ETX,"%6<xor8ff>";
     out ACK,$1;
 }
-ReadStatus{
+ReadStatus {
+    out        "@",$1,STX,"001?f",ETX,"%3<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 f%!8X",ETX,"%6<xor8ff>";
+    out ACK,$1;
+}
+ReadModFonct {
     out        "@",$1,STX,"001?f",ETX,"%3<xor8ff>";
     in  ACK,$1,"@",$1,STX,"001 f%!8X",ETX,"%6<xor8ff>";
     out ACK,$1;
@@ -87,15 +92,32 @@ ReadStatus{
 #    in ACK,STX,"001 D%*14X%4X",ETX,"%1<xor8ff>";
 # OK:
 # in ACK,STX,"001 D%*15s%4X",ETX,"%1<xor8ff>";
-ReadMeas{
+ReadMeasSingle {
     out STX,"001?D",ETX,"%<xor8ff>";
     in ACK,STX,"001 D%*14X%4X",ETX,"%1<xor8ff>";
     out ACK;
 }
-ReadModFonct{
-    out STX,"001?M",ETX,"%<xor8ff>";
-    in ACK,STX,"001 D%!4X",ETX,"%<xor8ff>";
-    out ACK;
+ReadMeas {
+    out "@",$1,STX,"001?D",ETX,"%3<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 D%*14X%!4X",ETX,"%6<xor8ff>";
+    out ACK,$1;
+}
+ReadModFonct {
+    ExtraInput = Ignore;
+    out        "@",$1,STX,"001?M",ETX,"%3<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 M%!2X%*154X",ETX,"%6<xor8ff>";
+    out ACK,$1;
+}
+ReadModFonctNErrors {
+    ExtraInput = Ignore;
+    in  ACK,$1,"@",$1,STX,"001 M%*!2X%!2X%*152X",ETX,"%6<xor8ff>";
+}
+ReadModFonctError1 {
+#    ExtraInput = Ignore;
+    in  ACK,$1,"@",$1,STX,"001 M%*!4X%!2X%*150X",ETX,"%6<xor8ff>";
+}
+ReadModFonctError2 {
+    in  ACK,$1,"@",$1,STX,"001 M%*!6X%!2X%*148X",ETX,"%6<xor8ff>";
 }
 # Connect a stringout record to this to get
 # a generic command interface.

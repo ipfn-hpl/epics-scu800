@@ -117,18 +117,152 @@ record(longin, $(P)$(R)$(A):ReadMotorTemp){
   field(EGU, "C")
   field(SCAN, "10 second")
 }
+record(mbbi, $(P)$(R)$(A):ReadModFonct){
+    field(DESC, "Reads the pump operation mode")
+    field(DTYP, "stream" )
+  field(INP,  "@edwards.proto ReadModFonct('01') $(BUS)" )
+  field(ONVL,"1")
+  field(ONST,"Levitation")
+  field(TWVL,"2")
+  field(TWST,"No Levitation")
+  field(THVL,"3")
+  field(THST,"Acceleration")
+  field(FRVL,"4")
+  field(FRST,"Normal")
+  field(FVVL,"5")
+  field(FVST,"Deceleration")
+  field(SXVL,"6")
+  field(SXST,"Autotest")
+  field(SVVL,"7")
+  field(SVST,"Tuning")
+  field(EIVL,"8")
+  field(EIST,"Tuning Complete")
+  field(NIVL,"9")
+  field(NIST,"Updating control loop S/W")
+  field(TEVL,"10")
+  field(TEST,"Waiting to Update Driver S/W")
+  field(ELVL,"11")
+  field(ELST,"Updating Driver S/W")
+  field(SCAN, "10 second")
+}
+record(longin, $(P)$(R)$(A):ReadModFonctNErrors){
+    field(DESC, "Reads number of errors being detected")
+    field(DTYP, "stream" )
+    field(INP,  "@edwards.proto ReadModFonctNErrors('01') $(BUS)" )
+    field(VAL, "0")
+    field(LOPR, "0")
+    field(HOPR, "77")
+    field(HIGH, "3")
+    field(HIHI, "5")
+    field(SCAN, "I/O Intr")
+}
+record(longin, $(P)$(R)$(A):ReadModFonctError1){
+    field(DESC, "Reads first error being detected")
+    field(DTYP, "stream" )
+    field(INP,  "@edwards.proto ReadModFonctError1('01') $(BUS)" )
+    field(VAL, "0")
+    field(LOPR, "0")
+    field(HOPR, "65")
+    field(HIGH, "1")
+#    field(HIHI, "5")
+    field(SCAN, "I/O Intr")
+}
+record(longin, $(P)$(R)$(A):ReadModFonctError2){
+    field(DESC, "Reads second error being detected")
+    field(DTYP, "stream" )
+    field(INP,  "@edwards.proto ReadModFonctError2('01') $(BUS)" )
+    field(VAL, "0")
+    field(LOPR, "0")
+    field(HOPR, "65")
+    field(HIGH, "1")
+#    field(HIHI, "5")
+    field(SCAN, "I/O Intr")
+}
+record(mbbi, $(P)$(R)$(A):ReadModFonctWithWarning){
+    field(DESC, "Reads the pump operation mode")
+    field(DTYP, "stream" )
+    field(INP,  "@edwards.proto ReadModFonctWithWarning('01') $(BUS)" )
+    field(ONVL,"1")
+    field(ONST,"Levitation")
+    field(TWVL,"2")
+    field(TWST,"No Levitation")
+    field(THVL,"3")
+    field(THST,"Acceleration")
+    field(FRVL,"4")
+    field(FRST,"Normal")
+    field(FVVL,"5")
+    field(FVST,"Deceleration")
+    field(SXVL,"6")
+    field(SXST,"Autotest")
+    field(SVVL,"7")
+    field(SVST,"Tuning")
+    field(EIVL,"8")
+    field(EIST,"Tuning Complete")
+    field(NIVL,"9")
+    field(NIST,"Updating control loop S/W")
+    field(TEVL,"10")
+    field(TEST,"Waiting to Update Driver S/W")
+    field(ELVL,"11")
+    field(ELST,"Updating Driver S/W")
+    field(SCAN, "10 second")
+}
+record(mbbiDirect, $(P)$(R)$(A):WARNING){
+    field(DESC, "Reads WARNING being detected")
+    field(DTYP, "stream" )
+    field(INP,  "@edwards.proto ReadWarning('01') $(BUS)" )
+    field(FLNK, "$(P)$(R)$(A):WARNING:FANOUT1")
+}
+record(fanout, $(P)$(R)$(A):WARNING:FANOUT1){
+    field(DESC, "WARNING PV Fanout")
+    field(LNK1, "$(P)$(R)$(A):WARNING:BAD-PUMP-TX")
+    field(LNK2, "$(P)$(R)$(A):WARNING:SECOND-DAMGE-LMT")
+    field(LNK3, "$(P)$(R)$(A):WARNING:FIRST-DAMGE-LMT")
+    field(FLNK, "$(P)$(R)$(A):WARNING:FANOUT2")
+}
+record(fanout, $(P)$(R)$(A):WARNING:FANOUT2){
+    field(DESC, "WARNING PV Fanout")
+    field(LNK1, "$(P)$(R)$(A):WARNING:BAD-PUMP-TX")
+#    field(LNK1, "$(P)$(R)$(A):WARNING:FANOUT")
+    field(FLNK, "$(P)$(R)$(A):WARNING:FANOUT3")
+}
+record(fanout, $(P)$(R)$(A):WARNING:FANOUT3){
+    field(DESC, "WARNING PV Fanout")
+#    field(LNK1, "$(P)$(R)$(A):WARNING:FANOUT")
+}
+record(bi, $(P)$(R)$(A):WARNING:BAD-PUMP-TX){
+    field(DESC, "WARNING PV Fanout")
+    field(INP, "$(P)$(R)$(A):WARNING:B0 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)$(A):WARNING:SECOND-DAMGE-LMT){
+    field(DESC, "WARNING: Second Damage Limit")
+    field(INP, "$(P)$(R)$(A):WARNING:B1 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)$(A):WARNING:FIRST-DAMGE-LMT){
+    field(DESC, "WARNING: First Damage Limit")
+    field(INP, "$(P)$(R)$(A):WARNING:B2 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field(OSV,"MINOR")
+}
+
 record(mbbo, $(P)$(R)$(A):Command){
-  field( DTYP, "stream" )
-  field( OUT,  "@edwards.proto Command($(A)) $(BUS)" )
+    field( DTYP, "stream" )
+    field( OUT,  "@edwards.proto Command($(A)) $(BUS)" )
   # Check Pump rpm rates
   #field( ZRVL, "0" )
-  field( ONVL, "1" )
-  field( TWVL, "2" )
-  field( FRVL, "4" )
-  field( ONST, "START" )
-  field( TWST, "STOP" )
-  field( FRST, "RESET" )
-  field(VAL, "0")
+    field( ONVL, "1" )
+    field( TWVL, "2" )
+    field( FRVL, "4" )
+    field( ONST, "START" )
+    field( TWST, "STOP" )
+    field( FRST, "RESET" )
+    field(VAL, "0")
   # half of rated spped
 }
 #######################################
