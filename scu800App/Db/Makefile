@@ -9,6 +9,7 @@ include $(TOP)/configure/CONFIG
 #DB += xxx.db
 DB += edwards.db
 DB += edwards.proto
+DB += edwards-adc.proto
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

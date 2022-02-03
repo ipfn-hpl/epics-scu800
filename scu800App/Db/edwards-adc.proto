@@ -1,0 +1,44 @@
+Terminator   = CR;
+#LockTimeout  = 500;
+ReplyTimeout = 500;
+ReadTimeout  = 100;
+WriteTimeout = 100;
+MaxInput     = 170;
+#ExtraInput   = Error;
+ExtraInput   = Ignore;
+
+wCtrl {
+  out ${1} 2 "%.2r";
+}
+
+rCtrl {
+  out ${1} 2;
+  in  "%02r";
+}
+
+#  out "?GA",${1};
+readPressure {
+  out "?GA1";
+  in  "%E";
+}
+
+rConv {
+  out ${1} 0;
+  in  "%02r";
+}
+## e.g Command("01") {
+Command {
+    out "@\$1",STX,"001 E%02X",ETX,"%3<xor8ff>";
+    in ACK,$1,STX,"001#",ETX,"%6<xor8ff>";
+    out ACK,$1;
+}
+# Connect a stringout record to this to get
+# a generic command interface.
+# After processing finishes, the record contains the reply.
+
+debug {
+    ExtraInput = Ignore;
+    out "%s"; in "%60c"
+}
+
+

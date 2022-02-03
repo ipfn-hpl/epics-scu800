@@ -22,13 +22,20 @@ asynSetOption("RS485", 0, "stop", "1")
 #asynSetOption("RS485", 0, "clocal", "Y")
 #asynSetOption("RS485", 0, "crtscts", "N")
 
+drvAsynSerialPortConfigure("RS232","/dev/edwardsADC")
+asynSetOption("RS485", 0, "baud", "9600")
+asynSetOption("RS485", 0, "bits", "8")
+asynSetOption("RS485", 0, "parity", "none")
+asynSetOption("RS485", 0, "stop", "1")
+#asynSetOption("RS485", 0, "clocal", "Y")
+#asynSetOption("RS485", 0, "crtscts", "N")
 
 ## Load record instances
 #dbLoadRecords("db/xxx.db","user=bernardo")
-dbLoadRecords("db/edwards.db", "P=UUUUUU:,R=EDW:,A=1,BUS=RS485")
+dbLoadRecords("db/edwards.db", "P=UUU:,R=EDW:,A=01,BUS=RS485")
 
 var streamError 1
-var streamDebug 1
+#var streamDebug 1
 #streamSetLogfile("stream_logfile.txt")
 
 

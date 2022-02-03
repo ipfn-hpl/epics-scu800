@@ -20,10 +20,10 @@ rConv {
   out ${1} 0;
   in  "%02r";
 }
-# e.g Command("01") {
+## e.g Command("01") {
 Command {
-    out "@\$1",STX,"001 E%02X",ETX,"%<xor8ff>";
-    in ACK,$1,STX,"001#",ETX,"%<xor8ff>";
+    out "@\$1",STX,"001 E%02X",ETX,"%3<xor8ff>";
+    in ACK,$1,STX,"001#",ETX,"%6<xor8ff>";
     out ACK,$1;
 }
 #out "@",$1,STX,"001?h",ETX,"%3<xor8ff>";
@@ -50,15 +50,16 @@ ReadSpeedSetPointSingle{
     out ACK;
 }
 #    out STX,"001 h%04X",ETX,"%<xor8ff>";
-ReadSetPointM{
+ReadSetPointSingle {
     out STX,"001?d",ETX,"%<xor8ff>";
     in ACK,STX,"001 d%4X%*4X",ETX,"%1<xor8ff>";
     out ACK;
 }
+#ReadSetpoint: No reply within 200 ms to "@<01><02>001?d<03><96>"
 ReadSetPoint {
-    out STX,"001?d",ETX,"%<xor8ff>";
-    in ACK,STX,"001 d%4X%*4X",ETX,"%1<xor8ff>";
-    out ACK;
+    out "@",$1,STX,"001?d",ETX,"%3<xor8ff>";
+    in ACK,$1,"@",$1,STX,"001 d%4X%*4X",ETX,"%6<xor8ff>";
+    out ACK,$1;
 }
 ReadMotorTempSingle {
     out STX,"001?e",ETX,"%<xor8ff>";
@@ -72,11 +73,6 @@ ReadMotorTemp {
     out ACK,$1;
 }
 ReadStatus {
-    out        "@",$1,STX,"001?f",ETX,"%3<xor8ff>";
-    in  ACK,$1,"@",$1,STX,"001 f%!8X",ETX,"%6<xor8ff>";
-    out ACK,$1;
-}
-ReadModFonct {
     out        "@",$1,STX,"001?f",ETX,"%3<xor8ff>";
     in  ACK,$1,"@",$1,STX,"001 f%!8X",ETX,"%6<xor8ff>";
     out ACK,$1;
@@ -118,6 +114,20 @@ ReadModFonctError1 {
 }
 ReadModFonctError2 {
     in  ACK,$1,"@",$1,STX,"001 M%*!6X%!2X%*148X",ETX,"%6<xor8ff>";
+}
+ReadModFonctWWarning {
+    ExtraInput = Ignore;
+    out        "@",$1,STX,"001?m",ETX,"%3<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 m%!2X%*154X",ETX,"%6<xor8ff>";
+    out ACK,$1;
+}
+ReadWarning {
+    ExtraInput = Ignore;
+    in  ACK,$1,"@",$1,STX,"001 m%*!2X%!4X%*148X",ETX,"%6<xor8ff>";
+}
+ReadModFonctWWarningNErrors {
+    ExtraInput = Ignore;
+    in  ACK,$1,"@",$1,STX,"001 m%*!6X%!2X%*146X",ETX,"%6<xor8ff>";
 }
 # Connect a stringout record to this to get
 # a generic command interface.
