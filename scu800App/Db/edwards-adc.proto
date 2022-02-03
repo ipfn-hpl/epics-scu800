@@ -1,9 +1,9 @@
 Terminator   = CR;
 #LockTimeout  = 500;
-ReplyTimeout = 500;
-ReadTimeout  = 100;
-WriteTimeout = 100;
-MaxInput     = 170;
+ReplyTimeout = 300;
+ReadTimeout  = 200;
+#WriteTimeout = 100;
+MaxInput     = 16;
 #ExtraInput   = Error;
 ExtraInput   = Ignore;
 
@@ -18,19 +18,30 @@ rCtrl {
 
 #  out "?GA",${1};
 readPressure {
-  out "?GA1";
+  out "?GA\${1}";
   in  "%E";
+}
+readVoltage {
+  out "?VL\${1}";
+  in  "%E";
+}
+gaugeVersion {
+  out "?GV\${1}";
+  in  "%2d";
+}
+#Not responding
+getUnits {
+  out "?US";
+  in  "%d";
+}
+
+onChannel {
+  out "!RC1=0"
 }
 
 rConv {
   out ${1} 0;
   in  "%02r";
-}
-## e.g Command("01") {
-Command {
-    out "@\$1",STX,"001 E%02X",ETX,"%3<xor8ff>";
-    in ACK,$1,STX,"001#",ETX,"%6<xor8ff>";
-    out ACK,$1;
 }
 # Connect a stringout record to this to get
 # a generic command interface.
