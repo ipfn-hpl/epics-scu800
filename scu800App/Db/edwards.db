@@ -29,18 +29,10 @@
 ################################################
 # ### Reads the measured rotational speed  ### #
 ################################################
-record(ai, $(P)$(R)$(A):ReadPressure){
-    field(DESC, "Reads the measured rotational speed")
-    field(DTYP, "stream")
-    field(INP, "@edwards-adc.proto readPressure(1) RS232")
-    #field(PINI, "YES")
-    field(VAL, "22")
-    field(SCAN, "2 second")
-}
 record(longin, $(P)$(R)$(A):ReadMeas){
     field(DESC, "Reads the measured rotational speed")
     field(DTYP, "stream")
-    field(INP, "@edwards.proto ReadMeas('01') RS485")
+    field(INP, "@edwards.proto ReadMeas('02') RS485")
     #field(PINI, "YES")
     field(VAL, "22")
     #field(SCAN, "2 second")
@@ -70,7 +62,7 @@ record(longin, $(P)$(R)$(A):ReadSpeedSetpointSingle){
 record(longin, $(P)$(R)$(A):ReadSpeedSetpoint){
     field(DESC, "Reads the the Speed Set Point value")
     field( DTYP, "stream" )
-    field( INP,  "@edwards.proto ReadSpeedSetpoint('01') $(BUS)")
+    field( INP,  "@edwards.proto ReadSpeedSetpoint('02') $(BUS)")
   # Check Pump rpm rates
   # half of rated spped
     field(HIGH, "36000")
@@ -120,7 +112,7 @@ record(longin, $(P)$(R)$(A):ReadStatus){
 record(longin, $(P)$(R)$(A):ReadMotorTemp){
   field(DESC, "Reads the measured motor temperature")
   field(DTYP, "stream" )
-  field(INP,  "@edwards.proto ReadMotorTemp('01') $(BUS)" )
+  field(INP,  "@edwards.proto ReadMotorTemp('02') $(BUS)" )
   field(HIGH, "100")
   field(HIHI, "110")
   field(VAL, "1")

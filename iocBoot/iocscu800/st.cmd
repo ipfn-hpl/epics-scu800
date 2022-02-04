@@ -29,12 +29,13 @@ asynSetOption("RS485", 0, "parity", "none")
 asynSetOption("RS485", 0, "stop", "1")
 #asynSetOption("RS485", 0, "clocal", "Y")
 #asynSetOption("RS485", 0, "crtscts", "N")
-dbLoadRecords("db/edwards-adc.db", "P=UUU:,R=EDW:,A=1,BUS=RS232")
+dbLoadRecords("db/edwards-adc.db", "P=UUU:,R=ADC:,A=1,BUS=RS232")
 
 ## Load record instances
 #dbLoadRecords("db/xxx.db","user=bernardo")
 # A must be asci code 49=0x31='1'
 dbLoadRecords("db/edwards.db", "P=UUU:,R=EDW:,A=49,BUS=RS485")
+dbLoadRecords("db/edwards.db", "P=UUU:,R=EDW:,A='50',BUS=RS485")
 
 var streamError 1
 #var streamDebug 1

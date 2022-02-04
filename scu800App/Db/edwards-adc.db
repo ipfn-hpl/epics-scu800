@@ -29,21 +29,39 @@
 ################################################
 # ### Reads the measured rotational speed  ### #
 ################################################
-record(ai, $(P)$(R)$(A):ReadPressure){
+record(ai, $(P)$(R)1:ReadPressure){
     field(DESC, "Reads the measured Pressure")
     field(DTYP, "stream")
-    field(INP, "@edwards-adc.proto readPressure($(A)) $(BUS)")
+    field(INP, "@edwards-adc.proto readPressure(1,$(P)$(R)Error1) $(BUS)")
     field(VAL, "22")
     field(SCAN, "2 second")
-    field(FLNK, "$(P)$(R)$(A):GaugeVersion")
+    field(FLNK, "$(P)$(R)2:ReadPressure")
 }
-record(ai, $(P)$(R)$(A):GaugeVersion){
+record(stringin, $(P)$(R)Error1){
+    field(DESC, "Error1")
+}
+record(ai, $(P)$(R)2:ReadPressure){
+    field(DESC, "Reads the measured Pressure")
+    field(DTYP, "stream")
+    field(INP, "@edwards-adc.proto readPressure(2,$(P)$(R)Error2) $(BUS)")
+    field(VAL, "22")
+#    field(SCAN, "2 second")
+#    field(FLNK, "$(P)$(R)$(A):GaugeVersion")
+}
+record(stringin, $(P)$(R)Error2){
+    field(DESC, "Error2")
+}
+record(ai, $(P)$(R)1:GaugeVersion){
     field(DESC, "Reads the Gauge Model")
     field(DTYP, "stream")
-    field(INP, "@edwards-adc.proto gaugeVersion($(A)) $(BUS)")
+    field(INP, "@edwards-adc.proto gaugeVersion(1,$(P)$(R)ErrorG1)) $(BUS)")
     field(VAL, "22")
-    #field(FLNK, "$(P)$(R)$(A):Units MSS")
+    field(PINI, "YES")
+    field(FLNK, "$(P)$(R)$(A):Units")
     #field(SCAN, "10 second")
+}
+record(stringin, $(P)$(R)ErrorG1){
+    field(DESC, "ErrorG2")
 }
 record(mbbi, $(P)$(R)$(A):Units){
     field(DESC, "Reads the Units")

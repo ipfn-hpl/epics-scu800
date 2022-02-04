@@ -18,19 +18,23 @@ rCtrl {
 
 #  out "?GA",${1};
 readPressure {
+  wait 100;
   out "?GA\${1}";
   in  "%E";
+  @mismatch {in "%(\$2)10c"};
 }
 readVoltage {
   out "?VL\${1}";
   in  "%E";
 }
 gaugeVersion {
+  wait 100;
   out "?GV\${1}";
   in  "%2d";
 }
 #Not responding
 getUnits {
+  wait 100;
   out "?US";
   in  "%d";
 }
