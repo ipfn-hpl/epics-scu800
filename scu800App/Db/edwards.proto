@@ -80,31 +80,32 @@ ReadStatusINHIBITEnable {
     MaxInput = 22;
     in  ACK,$1,"@",$1,STX,"001 f%%*4X!2X%*2X",ETX,"%6<xor8ff>";
 }
-
+# OK
 ReadMeas {
+    MaxInput = 32;
     out "@",$1,STX,"001?D",ETX,"%3<xor8ff>";
-    in  ACK,$1,"@",$1,STX,"001 D%*14X%!4X",ETX,"%6<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 D%*14c%!4X",ETX,"%6<xor8ff>";
     out ACK,$1;
 }
 ReadModFonct {
     MaxInput = 172;
     out        "@",$1,STX,"001?M",ETX,"%3<xor8ff>";
-    in  ACK,$1,"@",$1,STX,"001 M%!2X%*156X",ETX,"%6<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 M%!2X%*156c",ETX,"%6<xor8ff>";
     out ACK,$1;
 }
 ReadModFonctNErrors {
-#    ExtraInput = Ignore;
+    ExtraInput = Ignore;
     MaxInput = 172;
-    in  ACK,$1,"@",$1,STX,"001 M%*!2X%!2X%*154X",ETX,"%6<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 M%*!2X%!2X%*154c",ETX,"%6<xor8ff>";
 }
 ReadModFonctError1 {
 #    ExtraInput = Ignore;
     MaxInput = 172;
-    in  ACK,$1,"@",$1,STX,"001 M%*!4X%!2X%*152X",ETX,"%6<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 M%*!4X%!2X%*152c",ETX,"%6<xor8ff>";
 }
 ReadModFonctError2 {
     MaxInput = 172;
-    in  ACK,$1,"@",$1,STX,"001 M%*!6X%!2X%*150X",ETX,"%6<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 M%*!6X%!2X%*150c",ETX,"%6<xor8ff>";
 }
 ## OK
 ReadModFonctWWarning {
@@ -116,7 +117,7 @@ ReadModFonctWWarning {
 }
 # NOK
 ReadWarning {
-    ExtraInput = Ignore;
+#    ExtraInput = Ignore;
     MaxInput = 176;
     in  ACK,$1,"@",$1,STX,"001 m%*!2X%!4X%*156c",ETX,"%6<xor8ff>";
 }

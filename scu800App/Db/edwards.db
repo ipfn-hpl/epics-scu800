@@ -128,6 +128,7 @@ record(longin, $(P)$(R)01:ReadMotorTemp){
   field(EGU, "C")
   field(SCAN, "2 second")
   field(DISA, "1")
+  field(FLNK, "$(P)$(R)02:ReadMotorTemp")
 }
 record(longin, $(P)$(R)02:ReadMotorTemp){
   field(DESC, "Reads the measured motor temperature")
@@ -137,27 +138,9 @@ record(longin, $(P)$(R)02:ReadMotorTemp){
   field(HIHI, "110")
   field(VAL, "1")
   field(EGU, "C")
-  field(SCAN, "2 second")
-  field(DISA, "1")
+#  field(SCAN, "2 second")
+#  field(DISA, "1")
 #  field(SCAN, "10 second")
-}
-record(longin, $(P)$(R)01a:ReadMeas){
-    field(DESC, "Reads the measured rotational speed")
-    field(DTYP, "stream")
-    field(INP, "@edwards.proto ReadMeas('01') RS485")
-    #field(PINI, "YES")
-    field(VAL, "22")
-    field(SCAN, "2 second")
-    field(DISA, "1")
-}
-record(longin, $(P)$(R)01b:ReadMeas){
-    field(DESC, "Reads the measured rotational speed")
-    field(DTYP, "stream")
-    field(INP, "@edwards.proto ReadMeas('02') RS485")
-    #field(PINI, "YES")
-    field(VAL, "22")
-    field(SCAN, "2 second")
-    field(DISA, "1")
 }
 record(longout, $(P)$(R)01:SetSpeedSetpoint){
     field(DESC, "Reads the measured rotational speed")
@@ -339,7 +322,8 @@ record(mbbiDirect, $(P)$(R)01:WARNING){
     field(DESC, "Reads WARNING being detected")
     field(DTYP, "stream" )
     field(INP,  "@edwards.proto ReadWarning('01') $(BUS)" )
-    field(FLNK, "$(P)$(R)01:WARNING:FANOUT1")
+    #field(FLNK, "$(P)$(R)01:WARNING:FANOUT1")
+    field(FLNK, "$(P)$(R)01:WARNING:BAD-PUMP-TX")
     field(SCAN, "I/O Intr")
 }
 record(fanout, $(P)$(R)01:WARNING:FANOUT1){
@@ -359,10 +343,12 @@ record(fanout, $(P)$(R)01:WARNING:FANOUT3){
     field(DESC, "WARNING PV Fanout")
 #    field(LNK1, "$(P)$(R)01:WARNING:FANOUT")
 }
+##  UUU:EDW:01:WARNING:BAD-PUMP-TX 2022-02-08 17:40:34.478545 OFF LINK INVALID
 record(bi, $(P)$(R)01:WARNING:BAD-PUMP-TX){
     field(DESC, "WARNING PV Fanout")
-    field(INP, "$(P)$(R)01:WARNING:B0 MSS")
+    field(INP, "$(P)$(R)01:WARNING:B0 NPP")
     field( ZNAM, "OFF" )
+    field( VAL, "1" )
     field( ONAM, "ON" )
     field(OSV,"MINOR")
 }
