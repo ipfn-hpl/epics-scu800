@@ -35,6 +35,7 @@ record(ai, $(P)$(R)1:ReadPressure){
     field(INP, "@edwards-adc.proto readPressure(1,$(P)$(R)Error1) $(BUS)")
     field(VAL, "22")
     field(SCAN, "2 second")
+    field(DISA, "1")
     field(FLNK, "$(P)$(R)2:ReadPressure")
 }
 record(stringin, $(P)$(R)Error1){
