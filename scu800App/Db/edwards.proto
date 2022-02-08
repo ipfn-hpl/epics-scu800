@@ -1,6 +1,6 @@
 Terminator   = "";
 #LockTimeout  = 500;
-ReplyTimeout = 300;
+ReplyTimeout = 200;
 ReadTimeout  = 200;
 WriteTimeout = 100;
 MaxInput     = 180;
@@ -62,11 +62,13 @@ SetSpeedSetPoint {
 }
 ReadStatus {
     MaxInput = 22;
+#    ReplyTimeout = 300;
     out        "@",$1,STX,"001?f",ETX,"%3<xor8ff>";
     in  ACK,$1,"@",$1,STX,"001 f%!8X",ETX,"%6<xor8ff>";
     out ACK,$1;
 }
 ReadStatusRMode {
+#    ReplyTimeout = 300;
     MaxInput = 22;
     in  ACK,$1,"@",$1,STX,"001 f%!2X%*6X",ETX,"%6<xor8ff>";
 }
@@ -104,20 +106,23 @@ ReadModFonctError2 {
     MaxInput = 172;
     in  ACK,$1,"@",$1,STX,"001 M%*!6X%!2X%*150X",ETX,"%6<xor8ff>";
 }
-## Error...
+## OK
 ReadModFonctWWarning {
     ExtraInput = Ignore;
+    MaxInput = 176;
     out        "@",$1,STX,"001?m",ETX,"%3<xor8ff>";
-    in  ACK,$1,"@",$1,STX,"001 m%!2X%*156X",ETX,"%6<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 m%!2X%*160c",ETX,"%6<xor8ff>";
     out ACK,$1;
 }
+# NOK
 ReadWarning {
     ExtraInput = Ignore;
-    in  ACK,$1,"@",$1,STX,"001 m%*!2X%!4X%*148X",ETX,"%6<xor8ff>";
+    MaxInput = 176;
+    in  ACK,$1,"@",$1,STX,"001 m%*!2X%!4X%*156c",ETX,"%6<xor8ff>";
 }
 ReadModFonctWWarningNErrors {
-    ExtraInput = Ignore;
-    in  ACK,$1,"@",$1,STX,"001 m%*!6X%!2X%*146X",ETX,"%6<xor8ff>";
+    MaxInput = 176;
+    in  ACK,$1,"@",$1,STX,"001 m%*!6X%!2X%*154c",ETX,"%6<xor8ff>";
 }
 # Connect a stringout record to this to get
 # a generic command interface.
