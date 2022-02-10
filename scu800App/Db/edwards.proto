@@ -37,6 +37,13 @@ ReadMeasValue {
     in  ACK,$1,"@",$1,STX,"001 [%*30c%!4X%(\$2)!4X%*10c%(\$3)!4X%*16c",ETX,"%6<xor8ff>";
     out ACK,$1;
 }
+ReadCounters {
+    MaxInput = 58;
+    ExtraInput  = Error;
+    out        "@",$1,STX,"001?c",ETX,"%3<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 c%!10c%(\$2)!10c%(\$3)!8X%(\$4)!8X%(\$5)!8X",ETX,"%6<xor8ff>";
+    out ACK,$1;
+}
 ReadMotorTemp {
     MaxInput = 18;
     ExtraInput  = Error;
@@ -49,13 +56,13 @@ ReadMotorTemp {
 ReadSetPoint {
     MaxInput = 22;
     out "@",$1,STX,"001?d",ETX,"%3<xor8ff>";
-    in ACK,$1,"@",$1,STX,"001 d%4X%*4X",ETX,"%6<xor8ff>";
+    in ACK,$1,"@",$1,STX,"001 d%4X%(\$2)4X",ETX,"%6<xor8ff>";
     out ACK,$1;
 }
-ReadSetPointTMS {
-    MaxInput = 22;
-    in ACK,$1,"@",$1,STX,"001 d%*4X%4X",ETX,"%6<xor8ff>";
-}
+#ReadSetPointTMS {
+#    MaxInput = 22;
+#    in ACK,$1,"@",$1,STX,"001 d%*4X%4X",ETX,"%6<xor8ff>";
+# }
 #out "@",$1,STX,"001?h",ETX,"%3<xor8ff>";
 ReadSpeedSetPoint{
     MaxInput = 18;
@@ -123,18 +130,8 @@ ReadModFonctWWarning {
     ExtraInput = Ignore;
     MaxInput = 176;
     out        "@",$1,STX,"001?m",ETX,"%3<xor8ff>";
-    in  ACK,$1,"@",$1,STX,"001 m%!2X%*160c",ETX,"%6<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 m%!2X%(\$2)!4X%(\$3)!2X%*154c",ETX,"%6<xor8ff>";
     out ACK,$1;
-}
-# NOK
-ReadWarning {
-#    ExtraInput = Ignore;
-    MaxInput = 176;
-    in  ACK,$1,"@",$1,STX,"001 m%*!2X%!4X%*156c",ETX,"%6<xor8ff>";
-}
-ReadModFonctWWarningNErrors {
-    MaxInput = 176;
-    in  ACK,$1,"@",$1,STX,"001 m%*!6X%!2X%*154c",ETX,"%6<xor8ff>";
 }
 # Connect a stringout record to this to get
 # a generic command interface.

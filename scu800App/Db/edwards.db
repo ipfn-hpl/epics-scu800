@@ -54,14 +54,90 @@ record(longin, $(P)$(R)01:MSpeed){
     field(VAL, "666")
     field(EGU, "Hz")
 }
+record(stringin, $(P)$(R)01:PumpSerialNo){
+    field(DESC, "Pump serial number")
+    field(VAL, "Void")
+}
+record(longin, $(P)$(R)01:PumpCnt){
+    field(DESC, "Pump time counter")
+    field(VAL, "-1")
+    field(EGU, "min")
+}
+record(longin, $(P)$(R)01:CuCnt){
+    field(DESC, "Control Unit time counter")
+    field(VAL, "-1")
+    field(EGU, "min")
+}
+record(longin, $(P)$(R)01:StartCnt){
+    field(DESC, "Start counter")
+    field(VAL, "-1")
+    field(EGU, "min")
+}
+record(stringin, $(P)$(R)01:ReadCounters){
+    field(DESC, "CU/Pump serialN, hour cnt, start cnt")
+    field(DTYP, "stream")
+    field(INP, "@edwards.proto ReadCounters('01', $(P)$(R)01:PumpSerialNo, $(P)$(R)01:PumpCnt, $(P)$(R)01:CuCnt, $(P)$(R)01:StartCnt) RS485")
+    field(PINI, "YES")
+    field(VAL, "Void")
+    field(SCAN, "2 second")
+    field(DISA, "1")
+    field(FLNK, "$(P)$(R)02:ReadCounters")
+}
+record(stringin, $(P)$(R)02:PumpSerialNo){
+    field(DESC, "Pump serial number")
+    field(VAL, "Void")
+}
+record(longin, $(P)$(R)02:PumpCnt){
+    field(DESC, "Pump time counter")
+    field(VAL, "-1")
+    field(EGU, "min")
+}
+record(longin, $(P)$(R)02:CuCnt){
+    field(DESC, "Control Unit time counter")
+    field(VAL, "-1")
+    field(EGU, "min")
+}
+record(longin, $(P)$(R)02:StartCnt){
+    field(DESC, "Start counter")
+    field(VAL, "-1")
+    field(EGU, "min")
+}
+record(stringin, $(P)$(R)02:ReadCounters){
+    field(DESC, "CU/Pump serialN, hour cnt, start cnt")
+    field(DTYP, "stream")
+    field(INP, "@edwards.proto ReadCounters('02', $(P)$(R)02:PumpSerialNo, $(P)$(R)02:PumpCnt, $(P)$(R)02:CuCnt, $(P)$(R)02:StartCnt) RS485")
+    field(VAL, "Void")
+}
 record(longin, $(P)$(R)01:ReadMeasValue){
     field(DESC, "Reads TMS Temp, M Temp, M Speed")
     field(DTYP, "stream")
     field(INP, "@edwards.proto ReadMeasValue('01', $(P)$(R)01:MTemp, $(P)$(R)01:MSpeed) RS485")
-    #field(PINI, "YES")
+    field(PINI, "YES")
     field(VAL, "22")
     field(SCAN, "2 second")
     field(DISA, "1")
+    field(FLNK, "$(P)$(R)02:ReadMeasValue")
+}
+record(longin, $(P)$(R)02:MTemp){
+  field(DESC, "Reads the measured TMS temperature")
+  field(HIGH, "100")
+  field(HIHI, "110")
+  field(VAL, "1")
+  field(EGU, "C")
+}
+record(longin, $(P)$(R)02:MSpeed){
+    field(DESC, "Reads the Motor Speed")
+    field(VAL, "666")
+    field(EGU, "Hz")
+}
+record(longin, $(P)$(R)02:ReadMeasValue){
+    field(DESC, "Reads TMS Temp, M Temp, M Speed")
+    field(DTYP, "stream")
+    field(INP, "@edwards.proto ReadMeasValue('02', $(P)$(R)02:MTemp, $(P)$(R)02:MSpeed) RS485")
+    #field(PINI, "YES")
+    field(VAL, "22")
+    #field(SCAN, "2 second")
+    #field(DISA, "1")
 }
 record(longin, $(P)$(R)02:ReadMeas){
     field(DESC, "Reads the measured rotational speed")
@@ -72,44 +148,59 @@ record(longin, $(P)$(R)02:ReadMeas){
     field(SCAN, "2 second")
     field(DISA, "1")
 }
-record(longin, $(P)$(R)01:ReadSetpoint){
-    field(DESC, "Reads Speed SP & TMS temperature")
-    field( DTYP, "stream" )
-    field( INP,  "@edwards.proto ReadSetpoint('01') $(BUS)" )
-  # Check Pump rpm rates
-  # half of rated spped
-    field(HIGH, "36000")
-    field(HIHI, "40000")
-    field(VAL, "666")
-    field(EGU, "Hz")
-    field(SCAN, "2 second")
-    field(DISA, "1")
-}
-record(longin, $(P)$(R)01:ReadSetpointTMS){
+record(longin, $(P)$(R)01:SetpointTMS){
     field(DESC, "Reads (Speed SP) & TMS temperature")
-    field( DTYP, "stream" )
-    field( INP,  "@edwards.proto ReadSetpointTMS('01') $(BUS)" )
-  # Check Pump rpm rates
-  # half of rated spped
     field(HIGH, "150")
     field(HIHI, "200")
     field(VAL, "55")
     field(EGU, "ºC")
-    #field(SCAN, "I/O Intr")
 }
-record(longin, $(P)$(R)02:ReadSetpoint){
-    field(DESC, "Reads Speed SP & TMS temperature")
+record(longin, $(P)$(R)01:ReadSetpoint){
+    field(DESC, "Reads Speed SP & TMS temp SP")
     field( DTYP, "stream" )
-    field( INP,  "@edwards.proto ReadSetpoint('02') $(BUS)" )
+    field( INP,  "@edwards.proto ReadSetpoint('01', $(P)$(R)01:SetpointTMS) $(BUS)")
   # Check Pump rpm rates
   # half of rated spped
-    field(HIGH, "36000")
-    field(HIHI, "40000")
+    field(HIGH, "600")
+    field(HIHI, "650")
     field(VAL, "666")
     field(EGU, "Hz")
-    field(SCAN, "2 second")
-    field(DISA, "1")
+#    field(SCAN, "2 second")
+#    field(DISA, "1")
+    field(FLNK, "$(P)$(R)02:ReadSetpoint")
 }
+record(longin, $(P)$(R)02:SetpointTMS){
+    field(DESC, "Reads (Speed SP) & TMS temperature")
+    field(HIGH, "150")
+    field(HIHI, "200")
+    field(VAL, "5")
+    field(EGU, "ºC")
+}
+record(longin, $(P)$(R)02:ReadSetpoint){
+    field(DESC, "Reads Speed SP & TMS temp SP")
+    field( DTYP, "stream" )
+    field( INP,  "@edwards.proto ReadSetpoint('02', $(P)$(R)02:SetpointTMS) $(BUS)")
+  # Check Pump rpm rates
+  # half of rated speed
+    field(HIGH, "600")
+    field(HIHI, "650")
+    field(VAL, "666")
+    field(EGU, "Hz")
+    #field(SCAN, "2 second")
+    #field(DISA, "1")
+}
+#record(longin, $(P)$(R)01:ReadSetpointTMS){
+    #field(DESC, "Reads (Speed SP) & TMS temperature")
+    #field( DTYP, "stream" )
+    #field( INP,  "@edwards.proto ReadSetpointTMS('01') $(BUS)" )
+  ## Check Pump rpm rates
+  ## half of rated spped
+    #field(HIGH, "150")
+    #field(HIHI, "200")
+    #field(VAL, "55")
+    #field(EGU, "ºC")
+    ##field(SCAN, "I/O Intr")
+#}
 record(longout, $(P)$(R)01:SetSpeedSetpoint){
     field(DESC, "Reads the measured rotational speed")
     field( DTYP, "stream" )
@@ -119,6 +210,18 @@ record(longout, $(P)$(R)01:SetSpeedSetpoint){
     # half of rated spped
     field( DRVL, "292" )
     field(EGU, "Hz")
+    field(FLNK, "$(P)$(R)01:ReadSetpoint")
+}
+record(longout, $(P)$(R)02:SetSpeedSetpoint){
+    field(DESC, "Reads the measured rotational speed")
+    field( DTYP, "stream" )
+    field( OUT,  "@edwards.proto SetSpeedSetpoint('02') $(BUS)")
+    # Check Pump rpm rates. rated 35000 ~ 584 Hz
+    field( DRVH, "584" )
+    # half of rated spped
+    field( DRVL, "292" )
+    field(EGU, "Hz")
+    field(FLNK, "$(P)$(R)02:ReadSetpoint")
 }
 record(longin, $(P)$(R)01:ReadSpeedSetpoint){
     field(DESC, "Reads the the Speed Set Point value")
@@ -147,6 +250,7 @@ record(longin, $(P)$(R)02:ReadSpeedSetpoint){
     field(SCAN, "2 second")
     field(DISA, "1")
 }
+# Redundant
 record(longin, $(P)$(R)01:ReadMotorTemp){
   field(DESC, "Reads the measured motor temperature")
   field(DTYP, "stream" )
@@ -159,6 +263,7 @@ record(longin, $(P)$(R)01:ReadMotorTemp){
   field(DISA, "1")
   field(FLNK, "$(P)$(R)02:ReadMotorTemp")
 }
+# Redundant
 record(longin, $(P)$(R)02:ReadMotorTemp){
   field(DESC, "Reads the measured motor temperature")
   field(DTYP, "stream" )
@@ -170,16 +275,6 @@ record(longin, $(P)$(R)02:ReadMotorTemp){
 #  field(SCAN, "2 second")
 #  field(DISA, "1")
 #  field(SCAN, "10 second")
-}
-record(longout, $(P)$(R)01:SetSpeedSetpoint){
-    field(DESC, "Reads the measured rotational speed")
-    field( DTYP, "stream" )
-    field( OUT,  "@edwards.proto SetSpeedSetpoint('01') $(BUS)")
-    # Check Pump rpm rates. rated 35000 ~ 584 Hz
-    field( DRVH, "584" )
-    # half of rated spped
-    field( DRVL, "292" )
-    field(EGU, "Hz")
 }
 #  How to force string as argument to Stream device?
 ### record(longin, $(P)$(R)01:ReadSpeedSetpoint){
@@ -269,7 +364,7 @@ record(mbbi, $(P)$(R)01:ReadModFonct){
     field(ELST,"Updating Driver S/W")
     field(DISA, "1")
     field(SCAN, "2 second")
-    field(PINI, "YES")
+#    field(PINI, "YES")
 }
 record(longin, $(P)$(R)01:ReadModFonctNErrors){
     field(DESC, "Reads number of errors being detected")
@@ -307,7 +402,7 @@ record(longin, $(P)$(R)01:ReadModFonctError2){
 record(mbbi, $(P)$(R)01:ReadModFonctWithWarning){
     field(DESC, "Reads the pump operation mode")
     field(DTYP, "stream" )
-    field(INP,  "@edwards.proto ReadModFonctWWarning('01') $(BUS)" )
+    field(INP,  "@edwards.proto ReadModFonctWWarning('01', $(P)$(R)01:WARNING, $(P)$(R)01:NErrors) $(BUS)" )
     field(ZRVL,"0")
     field(ZRST,"0")
     field(ONVL,"1")
@@ -336,63 +431,155 @@ record(mbbi, $(P)$(R)01:ReadModFonctWithWarning){
     field(SCAN, "2 second")
     #field(SCAN, "10 second")
 }
-record(longin, $(P)$(R)01:ReadModFonctWWarningNErrors ){
+record(longin, $(P)$(R)01:NErrors){
     field(DESC, "Reads number of errors being detected")
-    field(DTYP, "stream" )
-    field(INP,  "@edwards.proto ReadModFonctWWarningNErrors('01') $(BUS)" )
     field(VAL, "0")
     field(LOPR, "0")
     field(HOPR, "77")
     field(HIGH, "3")
     field(HIHI, "5")
-    field(SCAN, "I/O Intr")
 }
 record(mbbiDirect, $(P)$(R)01:WARNING){
     field(DESC, "Reads WARNING being detected")
-    field(DTYP, "stream" )
-    field(INP,  "@edwards.proto ReadWarning('01') $(BUS)" )
-    #field(FLNK, "$(P)$(R)01:WARNING:FANOUT1")
-    field(FLNK, "$(P)$(R)01:WARNING:BAD-PUMP-TX")
-    field(SCAN, "I/O Intr")
+    field(FLNK, "$(P)$(R)01:WARNING:FANOUT1")
+    #field(FLNK, "$(P)$(R)01:WARNING:BAD-PUMP-TX")
 }
 record(fanout, $(P)$(R)01:WARNING:FANOUT1){
     field(DESC, "WARNING PV Fanout")
+    field(SELM, "All")
     field(LNK1, "$(P)$(R)01:WARNING:BAD-PUMP-TX")
-    field(LNK2, "$(P)$(R)01:WARNING:SECOND-DAMGE-LMT")
-    field(LNK3, "$(P)$(R)01:WARNING:FIRST-DAMGE-LMT")
+    field(LNK2, "$(P)$(R)01:WARNING:SecondDamageLmt")
+    field(LNK3, "$(P)$(R)01:WARNING:FirstDamageLmt")
+    field(LNK4, "$(P)$(R)01:WARNING:Imbalance-X_H")
+    field(LNK5, "$(P)$(R)01:WARNING:Imbalance-X_B")
+    field(LNK6, "$(P)$(R)01:WARNING:Imbalance-Z")
     field(FLNK, "$(P)$(R)01:WARNING:FANOUT2")
 }
 record(fanout, $(P)$(R)01:WARNING:FANOUT2){
     field(DESC, "WARNING PV Fanout")
-    field(LNK1, "$(P)$(R)01:WARNING:BAD-PUMP-TX")
-#    field(LNK1, "$(P)$(R)01:WARNING:FANOUT")
+    field(LNK1, "$(P)$(R)01:WARNING:PumpRunTimeOver")
+    field(LNK2, "$(P)$(R)01:WARNING:PumpOverload")
+    field(LNK3, "$(P)$(R)01:WARNING:PumpRecordBungle")
+    field(LNK4, "$(P)$(R)01:WARNING:PCBRecordBungle")
+    field(LNK5, "$(P)$(R)01:WARNING:LowRTCBattery")
+    field(LNK6, "$(P)$(R)01:WARNING:ClockDataLost")
     field(FLNK, "$(P)$(R)01:WARNING:FANOUT3")
 }
 record(fanout, $(P)$(R)01:WARNING:FANOUT3){
     field(DESC, "WARNING PV Fanout")
-#    field(LNK1, "$(P)$(R)01:WARNING:FANOUT")
+    field(LNK1, "$(P)$(R)01:WARNING:RecoverbyAUXData")
 }
 ##  UUU:EDW:01:WARNING:BAD-PUMP-TX 2022-02-08 17:40:34.478545 OFF LINK INVALID
 record(bi, $(P)$(R)01:WARNING:BAD-PUMP-TX){
     field(DESC, "WARNING PV Fanout")
-    field(INP, "$(P)$(R)01:WARNING:B0 NPP")
+    field(INP, "$(P)$(R)01:WARNING.B0 NPP")
     field( ZNAM, "OFF" )
     field( VAL, "1" )
     field( ONAM, "ON" )
     field(OSV,"MINOR")
 }
-record(bi, $(P)$(R)01:WARNING:SECOND-DAMGE-LMT){
+record(bi, $(P)$(R)01:WARNING:SecondDamageLmt){
     field(DESC, "WARNING: Second Damage Limit")
-    field(INP, "$(P)$(R)01:WARNING:B1 MSS")
+    field(INP, "$(P)$(R)01:WARNING.B1 MSS")
     field( ZNAM, "OFF" )
     field( ONAM, "ON" )
+    field( VAL, "1" )
     field(OSV,"MINOR")
 }
-record(bi, $(P)$(R)01:WARNING:FIRST-DAMGE-LMT){
+record(bi, $(P)$(R)01:WARNING:FirstDamageLmt){
     field(DESC, "WARNING: First Damage Limit")
-    field(INP, "$(P)$(R)01:WARNING:B2 MSS")
+    field(INP, "$(P)$(R)01:WARNING.B2 MSS")
     field( ZNAM, "OFF" )
     field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:Imbalance-X_H){
+    field(DESC, "WARNING: Imbalance-X_H")
+    field(INP, "$(P)$(R)01:WARNING.B3 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:Imbalance-X_B){
+    field(DESC, "WARNING: Imbalance-X_B")
+    field(INP, "$(P)$(R)01:WARNING.B4 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:Imbalance-Z){
+    field(DESC, "WARNING: Imbalance-Z")
+    field(INP, "$(P)$(R)01:WARNING.B5 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:PumpRunTimeOver){
+    field(DESC, "WARNING:PumpRunTimeOver ")
+    field(INP, "$(P)$(R)01:WARNING.B6 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:PumpOverload){
+    field(DESC, "WARNING: PumpOverload")
+    field(INP, "$(P)$(R)01:WARNING.B7 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:PumpRecordBungle){
+    field(DESC, "WARNING:PumpRecordBungle ")
+    field(INP, "$(P)$(R)01:WARNING.B8 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:PCBRecordBungle){
+    field(DESC, "WARNING:PCBRecordBungle ")
+    field(INP, "$(P)$(R)01:WARNING.B9 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:LowRTCBattery){
+    field(DESC, "WARNING:LowRTCBattery ")
+    field(INP, "$(P)$(R)01:WARNING.B10 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:ClockDataLost){
+    field(DESC, "WARNING:ClockDataLost ")
+    field(INP, "$(P)$(R)01:WARNING.B11 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:RecoverbyAUXData){
+    field(DESC, "WARNING:RecoverbyAUXData ")
+    field(INP, "$(P)$(R)01:WARNING.B12 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
+    field(OSV,"MINOR")
+}
+record(bi, $(P)$(R)01:WARNING:){
+    field(DESC, "WARNING: ")
+#    field(INP, "$(P)$(R)01:WARNING.B13 MSS")
+    field( ZNAM, "OFF" )
+    field( ONAM, "ON" )
+    field( VAL, "1" )
     field(OSV,"MINOR")
 }
 
