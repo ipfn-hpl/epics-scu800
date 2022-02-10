@@ -34,6 +34,35 @@ record(longin, $(P)$(R)01:ReadMeas){
     field(SCAN, "2 second")
     field(DISA, "1")
 }
+#record(longin, $(P)$(R)01:TMSTemp){
+  #field(DESC, "Reads the measured motor temperature")
+  #field(HIGH, "100")
+  #field(HIHI, "110")
+  #field(VAL, "1")
+  #field(EGU, "C")
+  ##field(FLNK, "$(P)$(R)02:ReadMotorTemp")
+#}
+record(longin, $(P)$(R)01:MTemp){
+  field(DESC, "Reads the measured TMS temperature")
+  field(HIGH, "100")
+  field(HIHI, "110")
+  field(VAL, "1")
+  field(EGU, "C")
+}
+record(longin, $(P)$(R)01:MSpeed){
+    field(DESC, "Reads the Motor Speed")
+    field(VAL, "666")
+    field(EGU, "Hz")
+}
+record(longin, $(P)$(R)01:ReadMeasValue){
+    field(DESC, "Reads TMS Temp, M Temp, M Speed")
+    field(DTYP, "stream")
+    field(INP, "@edwards.proto ReadMeasValue('01', $(P)$(R)01:MTemp, $(P)$(R)01:MSpeed) RS485")
+    #field(PINI, "YES")
+    field(VAL, "22")
+    field(SCAN, "2 second")
+    field(DISA, "1")
+}
 record(longin, $(P)$(R)02:ReadMeas){
     field(DESC, "Reads the measured rotational speed")
     field(DTYP, "stream")
@@ -66,7 +95,7 @@ record(longin, $(P)$(R)01:ReadSetpointTMS){
     field(HIHI, "200")
     field(VAL, "55")
     field(EGU, "ºC")
-    field(SCAN, "I/O Intr")
+    #field(SCAN, "I/O Intr")
 }
 record(longin, $(P)$(R)02:ReadSetpoint){
     field(DESC, "Reads Speed SP & TMS temperature")
@@ -199,7 +228,7 @@ record(mbbi, $(P)$(R)01:ReadStatusRMode){
     field(SXST,"STP-Link")
     field(SVVL,"7")
     field(SVST,"Reserved")
-    field(SCAN, "I/O Intr")
+    #field(SCAN, "I/O Intr")
     field(DISA, "1")
 }
 record(longin, $(P)$(R)01:ReadModFonctI){

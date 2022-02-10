@@ -26,6 +26,17 @@ Command {
     in ACK,$1,STX,"001#",ETX,"%6<xor8ff>";
     out ACK,$1;
 }
+# 3+3+1+ 30 + 4 + 4 + 10 + 4  +  16  + 1 + 1 = 77
+#in  ACK,$1,"@",$1,STX,"001 [%*30c%!4X%(\$2)!4X%*10c%(\$3)!4X%*16c",ETX,"%6<xor8ff>";
+# buffer="01@01<02>001 [7F7F7F7F7F25222622121316103915FFCE000F8C010000320000000A000A00280014<03><cb>"
+#
+ReadMeasValue {
+    MaxInput = 82;
+    ExtraInput  = Error;
+    out        "@",$1,STX,"001?[",ETX,"%3<xor8ff>";
+    in  ACK,$1,"@",$1,STX,"001 [%*30c%!4X%(\$2)!4X%*10c%(\$3)!4X%*16c",ETX,"%6<xor8ff>";
+    out ACK,$1;
+}
 ReadMotorTemp {
     MaxInput = 18;
     ExtraInput  = Error;
