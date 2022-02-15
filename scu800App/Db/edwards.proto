@@ -7,20 +7,7 @@ MaxInput     = 180;
 #ExtraInput   = Error;
 ExtraInput   = Ignore;
 
-wCtrl {
-  out ${1} 2 "%.2r";
-}
-
-rCtrl {
-  out ${1} 2;
-  in  "%02r";
-}
-
-rConv {
-  out ${1} 0;
-  in  "%02r";
-}
-## e.g Command("01") {
+## e.g Command("02") {
 Command {
     out "@\$1",STX,"001 E%02X",ETX,"%3<xor8ff>";
     in ACK,$1,STX,"001#",ETX,"%6<xor8ff>";

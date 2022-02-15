@@ -1,24 +1,15 @@
 Terminator   = CR;
 #LockTimeout  = 500;
-ReplyTimeout = 300;
-ReadTimeout  = 200;
+ReplyTimeout = 400;
+ReadTimeout  = 300;
 #WriteTimeout = 100;
 MaxInput     = 16;
 #ExtraInput   = Error;
 ExtraInput   = Ignore;
 
-wCtrl {
-  out ${1} 2 "%.2r";
-}
-
-rCtrl {
-  out ${1} 2;
-  in  "%02r";
-}
-
 #  out "?GA",${1};
 readPressure {
-  wait 100;
+  wait 200;
   out "?GA\${1}";
   in  "%E";
   @mismatch {in "%(\$2)10c"};
@@ -28,7 +19,7 @@ readVoltage {
   in  "%E";
 }
 gaugeVersion {
-  wait 100;
+  wait 200;
   out "?GV\${1}";
   in  "%2d";
 }

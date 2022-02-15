@@ -34,20 +34,19 @@ record(ai, $(P)$(R)1:ReadPressure){
     field(DTYP, "stream")
     field(INP, "@edwards-adc.proto readPressure(1,$(P)$(R)Error1) $(BUS)")
     field(VAL, "22")
-    field(SCAN, "2 second")
+    field(SCAN, "5 second")
     field(DISA, "1")
     field(FLNK, "$(P)$(R)2:ReadPressure")
-}
-record(stringin, $(P)$(R)Error1){
-    field(DESC, "Error1")
 }
 record(ai, $(P)$(R)2:ReadPressure){
     field(DESC, "Reads the measured Pressure")
     field(DTYP, "stream")
     field(INP, "@edwards-adc.proto readPressure(2,$(P)$(R)Error2) $(BUS)")
     field(VAL, "22")
-#    field(SCAN, "2 second")
 #    field(FLNK, "$(P)$(R)$(A):GaugeVersion")
+}
+record(stringin, $(P)$(R)Error1){
+    field(DESC, "Error1")
 }
 record(stringin, $(P)$(R)Error2){
     field(DESC, "Error2")
