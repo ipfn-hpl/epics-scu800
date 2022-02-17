@@ -1,6 +1,6 @@
 Terminator   = "";
 #LockTimeout  = 500;
-ReplyTimeout = 200;
+ReplyTimeout = 300;
 ReadTimeout  = 200;
 WriteTimeout = 100;
 MaxInput     = 180;
@@ -59,6 +59,16 @@ ReadSpeedSetPoint{
 }
 # e.g SetSpeedSetPoint("01") {
 #NOK    @init {ReadSpeedSetPoint($1); }
+# edwards.proto line 67: Unknown command name 'readspeedsetpoint'
+#_ edwards.proto line 67: in command 'readspeedsetpoint'
+#_ edwards.proto line 67: in handler '@init'
+#    @init {
+#        out "@",$1,STX,"001?h",ETX,"%3<xor8ff>";
+#        wait 200;
+#        in  ACK,$1,"@",$1,STX,"001 h%4X",ETX,"%6<xor8ff>";
+#        out ACK,$1;
+#    }
+
 SetSpeedSetPoint {
     MaxInput = 13;
     out "@",$1,STX,"001 h%04X",ETX,"%3<xor8ff>";
